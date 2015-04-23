@@ -1,4 +1,4 @@
-import java.lang.reflect.Array;
+
 import java.util.Arrays;
 
 public class Main {
@@ -9,6 +9,7 @@ public class Main {
         System.out.println(Arrays.toString(t.bubbleSort(test)));
         System.out.println(Arrays.toString(t.selectionSort(test)));
         System.out.println(Arrays.toString(t.insertionSort(test)));
+        System.out.println(Arrays.toString(t.mergeSort(test)));
 
     }
    public int[] bubbleSort(int[] arr){
@@ -30,10 +31,55 @@ public class Main {
         //not implemented
         return arr;
     }
-    public int [] mergeSort(int[] arr){
-        //not implemented
+    //initializer for merge sort
+    public int[] mergeSort(int[] arr){
+        return mergeSort(arr,0,arr.length-1);
+    }
+    //recursively sort each array
+    public int [] mergeSort(int[] arr,int left,int right){
+        if(left<right){
+            int pivot=(right+left)/2;
+            mergeSort(arr,left,pivot);
+            mergeSort(arr,pivot+1,right);
+            merge(arr,pivot+1,right);
+        }
 
         return arr;
+    }
+    //merge arrays back
+    public int[] merge(int[] arr, int left, int right){
+        if(right-left<2)
+            return arr;
+       int []tmp=new int[arr.length-1];
+
+        //copy original array into a tmp
+        for (int i = left; i <= right ; i++) {
+            tmp[i]=arr[i];
+        }
+        int midpivot=((right+left)/2)+1;
+        int leftpivot=left;
+        //compare and copy smallest val from tmp back to arr
+        while(left<=midpivot && midpivot<=right)
+        {
+            if(tmp[left]<=tmp[midpivot]){
+                arr[left]=tmp[midpivot];
+                left++;
+            }
+            else {
+                //out of order therefore must rearrange
+                arr[left]=tmp[midpivot];
+                midpivot  = midpivot+1;
+            }
+            leftpivot=leftpivot+1;
+        }
+        while(left<=midpivot){
+            arr[leftpivot]=tmp[left];
+            left++;
+            leftpivot++;
+        }
+
+        return arr;
+
     }
     public int[] selectionSort(int[] arr){
         for (int i = 0; i <arr.length-1 ; i++) {
