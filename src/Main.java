@@ -6,17 +6,17 @@ import java.util.Arrays;
 public class Main {
 
     public static void main(String[] args) {
-	int[] test={1,90,3,16,1,15,32,9,8,81,5,19,2};
+	Integer[] test={19, 12, 19, 12, 8};
     Integer[] test1= {1,15,32,9,8,5,19};
         Main t=new Main();
         //System.out.println(Arrays.toString(t.bubbleSort(test)));//working
         //System.out.println(Arrays.toString(t.selectionSort(test)));//working
-        System.out.println(Arrays.toString(t.insertionSort(test)));//working
-        //System.out.println(t.mergeSort(test1));//working
-        //System.out.println(Arrays.toString(t.quickSort(test, 0, test.length - 1)));//working
+        //System.out.println(Arrays.toString(t.insertionSort(test)));//working
+        //System.out.println(Arrays.toString(t.mergeSort(test)));//working
+        //System.out.println(Arrays.toString(t.quickSort(test)));//working
 
     }
-   public int[] bubbleSort(int[] arr){
+   public Integer[] bubbleSort(Integer[] arr){
        for (int i = arr.length-1; i > 1; i--) {
            for (int j = 0; j < i; j++) {
 
@@ -31,7 +31,10 @@ public class Main {
        }
        return arr;
    }
-    public int[] quickSort(int[] arr,int low, int high){
+    public Integer[] quickSort(Integer[] arr){
+        return quickSort(arr,0,arr.length-1);
+    }
+    public Integer[] quickSort(Integer[] arr,Integer low, Integer high){
         if(low<high)
         {
             int index = partition(arr,low,high);
@@ -41,7 +44,7 @@ public class Main {
         return arr;
     }
 
-    public int partition(int[] arr,int low,int high){
+    public int partition(Integer[] arr,Integer low,Integer high){
 
         int pivotval=arr[low];
 
@@ -62,9 +65,18 @@ public class Main {
         return wall;
     }
 
+   public Integer[] mergeSort(Integer[] in){
+      ArrayList<Integer> arr=mergeS(in);
+       Integer[] result= new Integer[arr.size()];
+       for (int i = 0; i <arr.size() ; i++) {
+           result[i]=arr.get(i);
+       }
+       return result;
+
+   }
     //recursively sort each array
-    public ArrayList<Integer> mergeSort( Integer[] in){
-        ArrayList<Integer> arr=new ArrayList<Integer>();
+    public ArrayList<Integer> mergeS(Integer[] in){
+        ArrayList arr=new ArrayList();
         //copy array to arraylist
         for (int i = 0; i <in.length; i++) {
             arr.add(in[i]);
@@ -73,8 +85,8 @@ public class Main {
         if(arr.size()<=1)
             return arr;
 
-        ArrayList<Integer> left=new ArrayList<Integer>();
-        ArrayList<Integer> right=new ArrayList<Integer>();
+        ArrayList left=new ArrayList();
+        ArrayList right=new ArrayList();
 
         int midpivot=arr.size()/2;
 
@@ -88,8 +100,8 @@ public class Main {
         }
 
         //sort left and right recursively
-        left=mergeSort(left.toArray(new Integer[left.size()]));
-        right=mergeSort(right.toArray(new Integer[right.size()]));
+        left=mergeS((Integer[]) left.toArray(new Integer[left.size()]));
+        right=mergeS((Integer[]) right.toArray(new Integer[right.size()]));
 
         //merge sorted sublists
         return merge(left,right);
@@ -97,7 +109,7 @@ public class Main {
     }
     //merge arrays back
     public ArrayList<Integer> merge(ArrayList<Integer> left,ArrayList<Integer> right){
-        ArrayList<Integer> sorted=new ArrayList<Integer>();
+        ArrayList sorted=new ArrayList();
 
         while(!left.isEmpty() && !right.isEmpty()){
             //left list element is less than right, add to sorted array and remove from left list
@@ -125,7 +137,7 @@ public class Main {
         return sorted;
 
     }
-    public int[] selectionSort(int[] arr){
+    public Integer[] selectionSort(Integer[] arr){
         for (int i = 0; i <arr.length-1; i++) {
             int min=i;
             for (int j = i+1; j <arr.length ; j++) {
@@ -140,7 +152,7 @@ public class Main {
         }
         return arr;
     }
-    public int[] insertionSort(int[] arr){
+    public Integer[] insertionSort(Integer[] arr){
         for (int i = 1; i <arr.length; i++) {
             int tmp= arr[i];
             int piv=i;
