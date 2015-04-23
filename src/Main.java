@@ -1,15 +1,17 @@
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Main {
 
     public static void main(String[] args) {
 	int[] test={1,15,32,9,8,5,19};
+    Integer[] test1= {1,15,32,9,8,5,19};
         Main t=new Main();
         System.out.println(Arrays.toString(t.bubbleSort(test)));
         System.out.println(Arrays.toString(t.selectionSort(test)));
         System.out.println(Arrays.toString(t.insertionSort(test)));
-        System.out.println(Arrays.toString(t.mergeSort(test)));
+        System.out.println(t.mergeSort(test1));
 
     }
    public int[] bubbleSort(int[] arr){
@@ -31,54 +33,68 @@ public class Main {
         //not implemented
         return arr;
     }
-    //initializer for merge sort
-    public int[] mergeSort(int[] arr){
-        return mergeSort(arr,0,arr.length-1);
-    }
+
     //recursively sort each array
-    public int [] mergeSort(int[] arr,int left,int right){
-        if(left<right){
-            int pivot=(right+left)/2;
-            mergeSort(arr,left,pivot);
-            mergeSort(arr,pivot+1,right);
-            merge(arr,pivot+1,right);
+    public ArrayList<Integer> mergeSort( Integer[] in){
+        ArrayList<Integer> arr=new ArrayList<Integer>();
+        //copy array to arraylist
+        for (int i = 0; i <in.length; i++) {
+            arr.add(in[i]);
+        }
+        //base case
+        if(arr.size()<=1)
+            return arr;
+
+        ArrayList<Integer> left=new ArrayList<Integer>();
+        ArrayList<Integer> right=new ArrayList<Integer>();
+
+        int midpivot=arr.size()/2;
+
+        //populate left side
+        for (int i = 0; i < midpivot; i++) {
+            left.add(arr.get(i));
+        }
+        //populate right side
+        for (int i = midpivot; i < arr.size(); i++) {
+            right.add(arr.get(i));
         }
 
-        return arr;
+        //sort left and right recursively
+        left=mergeSort(left.toArray(new Integer[left.size()]));
+        right=mergeSort(right.toArray(new Integer[right.size()]));
+
+        //merge sorted sublists
+        return merge(left,right);
+
     }
     //merge arrays back
-    public int[] merge(int[] arr, int left, int right){
-        if(right-left<2)
-            return arr;
-       int []tmp=new int[arr.length-1];
+    public ArrayList<Integer> merge(ArrayList<Integer> left,ArrayList<Integer> right){
+        ArrayList<Integer> sorted=new ArrayList<Integer>();
 
-        //copy original array into a tmp
-        for (int i = left; i <= right ; i++) {
-            tmp[i]=arr[i];
-        }
-        int midpivot=((right+left)/2)+1;
-        int leftpivot=left;
-        //compare and copy smallest val from tmp back to arr
-        while(left<=midpivot && midpivot<=right)
-        {
-            if(tmp[left]<=tmp[midpivot]){
-                arr[left]=tmp[midpivot];
-                left++;
+        while(!left.isEmpty() && !right.isEmpty()){
+            //left list element is less than right, add to sorted array and remove from left list
+            if(left.get(0)<=right.get(0)){
+                sorted.add(left.get(0));
+                left.remove(0);
             }
-            else {
-                //out of order therefore must rearrange
-                arr[left]=tmp[midpivot];
-                midpivot  = midpivot+1;
+            else{
+                sorted.add(right.get(0));
+                right.remove(0);
             }
-            leftpivot=leftpivot+1;
         }
-        while(left<=midpivot){
-            arr[leftpivot]=tmp[left];
-            left++;
-            leftpivot++;
+        if(!left.isEmpty()){
+            while(!left.isEmpty()){
+                sorted.add(left.get(0));
+                left.remove(0);
+            }
         }
-
-        return arr;
+        if(!right.isEmpty()){
+            while(!right.isEmpty()){
+                sorted.add(right.get(0));
+                right.remove(0);
+            }
+        }
+        return sorted;
 
     }
     public int[] selectionSort(int[] arr){
