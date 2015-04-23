@@ -6,10 +6,10 @@ import java.util.Arrays;
 public class Main {
 
     public static void main(String[] args) {
-	Integer[] test={19, 12, 19, 12, 8};
+	Integer[] test={6, 9, 6, 16, 4};
     Integer[] test1= {1,15,32,9,8,5,19};
         Main t=new Main();
-        //System.out.println(Arrays.toString(t.bubbleSort(test)));//working
+        System.out.println(Arrays.toString(t.bubbleSort(test)));//working
         //System.out.println(Arrays.toString(t.selectionSort(test)));//working
         //System.out.println(Arrays.toString(t.insertionSort(test)));//working
         //System.out.println(Arrays.toString(t.mergeSort(test)));//working
@@ -17,7 +17,7 @@ public class Main {
 
     }
    public Integer[] bubbleSort(Integer[] arr){
-       for (int i = arr.length-1; i > 1; i--) {
+       for (int i = arr.length-1; i >= 1; i--) {
            for (int j = 0; j < i; j++) {
 
            //swapping
@@ -65,78 +65,6 @@ public class Main {
         return wall;
     }
 
-   public Integer[] mergeSort(Integer[] in){
-      ArrayList<Integer> arr=mergeS(in);
-       Integer[] result= new Integer[arr.size()];
-       for (int i = 0; i <arr.size() ; i++) {
-           result[i]=arr.get(i);
-       }
-       return result;
-
-   }
-    //recursively sort each array
-    public ArrayList<Integer> mergeS(Integer[] in){
-        ArrayList arr=new ArrayList();
-        //copy array to arraylist
-        for (int i = 0; i <in.length; i++) {
-            arr.add(in[i]);
-        }
-        //base case
-        if(arr.size()<=1)
-            return arr;
-
-        ArrayList left=new ArrayList();
-        ArrayList right=new ArrayList();
-
-        int midpivot=arr.size()/2;
-
-        //populate left side
-        for (int i = 0; i < midpivot; i++) {
-            left.add(arr.get(i));
-        }
-        //populate right side
-        for (int i = midpivot; i < arr.size(); i++) {
-            right.add(arr.get(i));
-        }
-
-        //sort left and right recursively
-        left=mergeS((Integer[]) left.toArray(new Integer[left.size()]));
-        right=mergeS((Integer[]) right.toArray(new Integer[right.size()]));
-
-        //merge sorted sublists
-        return merge(left,right);
-
-    }
-    //merge arrays back
-    public ArrayList<Integer> merge(ArrayList<Integer> left,ArrayList<Integer> right){
-        ArrayList sorted=new ArrayList();
-
-        while(!left.isEmpty() && !right.isEmpty()){
-            //left list element is less than right, add to sorted array and remove from left list
-            if(left.get(0)<=right.get(0)){
-                sorted.add(left.get(0));
-                left.remove(0);
-            }
-            else{
-                sorted.add(right.get(0));
-                right.remove(0);
-            }
-        }
-        if(!left.isEmpty()){
-            while(!left.isEmpty()){
-                sorted.add(left.get(0));
-                left.remove(0);
-            }
-        }
-        if(!right.isEmpty()){
-            while(!right.isEmpty()){
-                sorted.add(right.get(0));
-                right.remove(0);
-            }
-        }
-        return sorted;
-
-    }
     public Integer[] selectionSort(Integer[] arr){
         for (int i = 0; i <arr.length-1; i++) {
             int min=i;
@@ -164,6 +92,61 @@ public class Main {
         }
         return arr;
     }
+    public Integer[] mergeSort(Integer[] arr){
+        if(arr.length==1)
+            return arr;
+        int lsize= arr.length%2==0? arr.length/2:arr.length/2+1;
+        int rsize=arr.length/2;
+        //fill left array
+        Integer[] left=new Integer[lsize];
+        for (int i = 0; i <lsize ; i++) {
+            left[i]=arr[i];
+        }
+        //fill right array
+        Integer[] right=new Integer[rsize];
+        int index=0;
+        for (int i = lsize; i < arr.length; i++) {
+            right[index]=arr[i];
+            index++;
+        }
+        left=mergeSort(left);
+        right=mergeSort(right);
+        return merge(left, right);
+
+    }
+    public Integer[] merge(Integer[] left,Integer[] right){
+        int leftwall=0;
+        int rightwall=0;
+        int index=0;
+        int size= left.length+right.length;
+        Integer[] tmp= new Integer[size];
+
+        while(leftwall!=left.length && rightwall!= right.length){
+            if(left[leftwall]>=right[rightwall]){
+                tmp[index]=right[rightwall];
+                rightwall++;
+                index++;
+            }
+            else{
+               tmp[index]=left[leftwall];
+                leftwall++;
+                index++;
+            }
+        }
+
+        while(leftwall!=left.length){
+            tmp[index]=left[leftwall];
+            index++;
+            leftwall++;
+        }
+        while(rightwall!=right.length){
+            tmp[index]=right[rightwall];
+            index++;
+            rightwall++;
+        }
+        return tmp;
+    }
+
 
 
 
